@@ -13,6 +13,7 @@ public class Driver {
     boolean UberJavaXPremium;
     int drivingTime;
     int numberOfFares;
+    int numberOfFaresRejected;
     int totalMilesDriven;
     int hours;
     int minutes;
@@ -68,16 +69,16 @@ public class Driver {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder();
-      sb.append(this.name + " Statistics for Session#0" + "\n");
-      sb.append("Number of Rides: " + this.numberOfFares + "\n");
-      sb.append("Rides rejected: \n");
-      sb.append("Total Hours & Minutes: " + this.hours + ":" + this.minutes + "\n");
-      sb.append("Total Miles: " + this.totalMilesDriven + "\n");
-      sb.append("Average Rating: \n");
-      sb.append("Total $ Paid: $\n");
-      sb.append("Net Amount Earned: \n");
-      sb.append("Operation Costs: \n");
-      sb.append("Effectively Hourly Rate: \n");
+      sb.append(this.name + "[UberXPremium] Statistics for Session#0" + "\n");
+      sb.append("\t Number of Rides: " + this.numberOfFares + "\n");
+      sb.append("\t Rides rejected: " + this.numberOfFaresRejected + "\n");
+      sb.append("\t Total Hours & Minutes: " + this.hours + ":" + this.minutes + "\n");
+      sb.append("\t Total Miles: " + this.totalMilesDriven + "\n");
+      sb.append("\t Average Rating: \n");
+      sb.append("\t Total $ Paid: $\n");
+      sb.append("\t Net Amount Earned: \n");
+      sb.append("\t Operation Costs: \n");
+      sb.append("\t Effectively Hourly Rate: \n");
 
       return sb.toString();
     }

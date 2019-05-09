@@ -22,13 +22,13 @@ public class APIHelper {
       httpConn.setReadTimeout(1000);
 
       int status = httpConn.getResponseCode();
-      System.out.println(status);
+      // System.out.println(status);
 
       br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
       StringBuilder sb = new StringBuilder();
       String readLine;
       while ((readLine = br.readLine()) != null) {
-        System.out.println(readLine);
+        // System.out.println(readLine);
         sb.append(readLine);
       }
       return sb.toString();
