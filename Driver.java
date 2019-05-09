@@ -74,7 +74,7 @@ public class Driver {
       sb.append("Total Hours & Minutes: " + this.hours + ":" + this.minutes + "\n");
       sb.append("Total Miles: " + this.totalMilesDriven + "\n");
       sb.append("Average Rating: \n");
-      sb.append("Total $ Paid: \n");
+      sb.append("Total $ Paid: $\n");
       sb.append("Net Amount Earned: \n");
       sb.append("Operation Costs: \n");
       sb.append("Effectively Hourly Rate: \n");

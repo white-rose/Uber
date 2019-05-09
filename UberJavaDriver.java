@@ -44,16 +44,14 @@ public class UberJavaDriver {
         rideDetails = rideDetails.replaceAll("</p>", "");
 
         // System.out.println("Ride Number: " + rideNumber);
-        // System.out.println("Ride Details: " + rideDetails);
         String minutes = rideDetails.substring(rideDetails.indexOf("Minutes: ") + 9).replaceAll("\\s","");
-        String toLocation = rideDetails.substring(rideDetails.indexOf("To: ") + 4, rideDetails.indexOf("Distance:")).replaceAll("\\s","");
-        toLocation = toLocation.replaceAll("<br/>", "");
-
-        // System.out.println("Minutes for fare: " + minutes);
+        String toLocation = rideDetails.substring(rideDetails.indexOf("To: ") + 4, rideDetails.indexOf("Distance:")).replaceAll("\\s","").replaceAll("<br/>", "");
+        String numberOfMilesForFare = rideDetails.substring(rideDetails.indexOf("Distance: ") + 10, rideDetails.indexOf("miles")).replaceAll("\\s","");
 
         driver1.numberOfFares++;
         driver1.currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes);
         driver1.currentLocation = new Location(toLocation);
+        driver1.totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
 
         // System.out.println(String.format("%d minutes has elapsed for current session ", driver1.currentSession.numberOfMinutesElapsed));
 
