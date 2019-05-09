@@ -69,9 +69,9 @@ public class Driver {
     public String toString() {
       StringBuilder sb = new StringBuilder();
       sb.append(this.name + " Statistics for Session#0" + "\n");
-      sb.append("Number of Rides:" + this.numberOfFares + "\n");
+      sb.append("Number of Rides: " + this.numberOfFares + "\n");
       sb.append("Rides rejected: \n");
-      sb.append("Total Hours & Minutes: " + this.hours + this.minutes + "\n");
+      sb.append("Total Hours & Minutes: " + this.hours + ":" + this.minutes + "\n");
       sb.append("Total Miles: " + this.totalMilesDriven + "\n");
       sb.append("Average Rating: \n");
       sb.append("Total $ Paid: \n");

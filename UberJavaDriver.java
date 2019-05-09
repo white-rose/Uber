@@ -103,11 +103,6 @@ public class UberJavaDriver {
       // System.out.println(APIHelper.get(baseNextFare + "Prateek"));
       // System.out.println(APIHelper.get(baseNextFare + "Naismith"));
 
-      // End session for drivers
-      System.out.println(String.format("%s ended session: %d", driver1.name, driver1.endSession()));
-      // System.out.println(String.format("%s ended session: %d", driver2.name, driver2.endSession()));
-      // System.out.println(String.format("%s ended session: %d", driver3.name, driver3.endSession()));
-
       // When your last Driver ends, the main method should print for each driver the following information:
       System.out.println("Driver Statistics for last session");
       System.out.println(driver1);
