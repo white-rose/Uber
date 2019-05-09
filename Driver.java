@@ -18,6 +18,7 @@ public class Driver {
     int hours;
     int minutes;
     double totalAmountEarned;
+    double operationCosts;
     Car car;
     UberStatistics uberStatistics;
     Session currentSession;
@@ -76,7 +77,7 @@ public class Driver {
       sb.append("\t Total Miles: " + this.totalMilesDriven + "\n");
       sb.append("\t Average Rating: \n");
       sb.append("\t Total $ Paid: $\n");
-      sb.append("\t Net Amount Earned: \n");
+      sb.append("\t Net Amount Earned: $" + this.totalAmountEarned + "\n");
       sb.append("\t Operation Costs: \n");
       sb.append("\t Effectively Hourly Rate: \n");
 

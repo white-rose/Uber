@@ -39,7 +39,7 @@ public class UberJavaDriver {
       while (driver1.currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && driver1.currentLocation.getName() != "San Fracisco") {
         String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung").replaceAll("<p>", "");;
         String rideNumber = fareDetails.substring(fareDetails.indexOf("#" + 1), fareDetails.indexOf("<br/")).replaceAll("#", "");
-        String fareEarned = fareDetails.substring(fareDetails.indexOf("$") + 1);
+        String fareEarned = fareDetails.substring(fareDetails.indexOf("$") + 1, fareDetails.indexOf(".") + 3);
         fareEarned = fareEarned.replaceAll("<br/>", "");
         System.out.println("Fare Earned: " + fareEarned + "\n");
 
@@ -57,6 +57,8 @@ public class UberJavaDriver {
           driver1.currentLocation = new Location(toLocation);
           driver1.totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
           driver1.minutes += Integer.valueOf(minutes);
+          // Driver gets %75 of profit
+          driver1.totalAmountEarned += Double.valueOf(fareEarned)*.75;
         } else {
           System.out.println(String.format("Ride# " + rideNumber + " has been rejected since it takes %s minutes", minutes));
           driver1.numberOfFaresRejected++;
