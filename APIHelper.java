@@ -28,7 +28,7 @@ public class APIHelper {
       StringBuilder sb = new StringBuilder();
       String readLine;
       while ((readLine = br.readLine()) != null) {
-        // System.out.println(readLine);
+        System.out.println(readLine);
         sb.append(readLine);
       }
       return sb.toString();

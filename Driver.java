@@ -72,7 +72,7 @@ public class Driver {
       sb.append(this.name + "[UberXPremium] Statistics for Session#0" + "\n");
       sb.append("\t Number of Rides: " + this.numberOfFares + "\n");
       sb.append("\t Rides rejected: " + this.numberOfFaresRejected + "\n");
-      sb.append("\t Total Hours & Minutes: " + this.hours + ":" + this.minutes + "\n");
+      sb.append("\t Total Hours & Minutes: " + this.minutes/60 + ":" + this.minutes%60 + "\n");
       sb.append("\t Total Miles: " + this.totalMilesDriven + "\n");
       sb.append("\t Average Rating: \n");
       sb.append("\t Total $ Paid: $\n");

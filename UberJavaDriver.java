@@ -5,17 +5,18 @@ import uberjava.APIHelper;
 
 public class UberJavaDriver {
 
-  private static final String baseNextFare = "https://www.cs.usfca.edu/~dhalperin/nextFare.cgi?driver=";
-  private static final String baseRideNumber = "https://www.cs.usfca.edu/~dhalperin/uberdistance.cgi?riderNumber=";
-  private static final String baseReject = "https://www.cs.usfca.edu/~dhalperin/reject.cgi?rideNumber=";
-  private static final String baseRating = "https://www.cs.usfca.edu/~dhalperin/rating.cgi?rideNumber=";
-  private static final String baseRideDetails = "https://www.cs.usfca.edu/~dhalperin/";
+  // URL's
+  private static final String baseDomain = "https://www.cs.usfca.edu/~dhalperin/";
+  private static final String baseNextFare = baseDomain + "nextFare.cgi?driver=";
+  private static final String baseRideNumber = baseDomain + "uberdistance.cgi?riderNumber=";
+  private static final String baseReject = baseDomain + "reject.cgi?rideNumber=";
+  private static final String baseRating = baseDomain + "rating.cgi?rideNumber=";
 
   private static final String naismithDriver = "Naismith";
   private static final String prateekDriver = "Prateek";
   private static final String baeSungDriver = "Bae Sung";
 
-  private static final int numberOfMinutesInSession = 1140;
+  private static final int numberOfMinutesInSession = 1440;
   private static final int numberOfMinutesAcceptableToAccept = 300;
 
 
@@ -35,28 +36,31 @@ public class UberJavaDriver {
       // Get Fares for Drivers
 
       // Get Fares for Driver until they have driven a session of 24 hours and end up in San Francisco
-      while (driver1.currentSession.numberOfMinutesElapsed < numberOfMinutesInSession) {
-        String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung");
-        fareDetails = fareDetails.replaceAll("<p>", "");
-        // System.out.println(fareDetails);
+      while (driver1.currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && driver1.currentLocation.getName() != "San Fracisco") {
+        String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung").replaceAll("<p>", "");;
         String rideNumber = fareDetails.substring(fareDetails.indexOf("#" + 1), fareDetails.indexOf("<br/")).replaceAll("#", "");
+        String fareEarned = fareDetails.substring(fareDetails.indexOf("$") + 1);
+        fareEarned = fareEarned.replaceAll("<br/>", "");
+        System.out.println("Fare Earned: " + fareEarned + "\n");
 
         String rideDetailsURL = fareDetails.substring(fareDetails.indexOf("\">") + 2, fareDetails.indexOf("</a>"));
         String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
-
         // System.out.println("Ride Number: " + rideNumber);
         String minutes = rideDetails.substring(rideDetails.indexOf("Minutes: ") + 9).replaceAll("\\s","");
         String toLocation = rideDetails.substring(rideDetails.indexOf("To: ") + 4, rideDetails.indexOf("Distance:")).replaceAll("\\s","").replaceAll("<br/>", "");
         String numberOfMilesForFare = rideDetails.substring(rideDetails.indexOf("Distance: ") + 10, rideDetails.indexOf("miles")).replaceAll("\\s","");
 
+        // Fares can only be accepted if it takes 300 minutes or less
         if (Integer.valueOf(minutes) <= numberOfMinutesAcceptableToAccept) {
           driver1.numberOfFares++;
           driver1.currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes);
           driver1.currentLocation = new Location(toLocation);
           driver1.totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
+          driver1.minutes += Integer.valueOf(minutes);
         } else {
-          System.out.println(String.format("Ride has been rejected that takes %s minutes", minutes));
+          System.out.println(String.format("Ride# " + rideNumber + " has been rejected since it takes %s minutes", minutes));
           driver1.numberOfFaresRejected++;
+          // Notify Dispatcher
         }
 
         System.out.println(driver1.name + " at end of Ride#" + rideNumber + ": total minutes = " + driver1.currentSession.numberOfMinutesElapsed +"; location = " + driver1.currentLocation);
