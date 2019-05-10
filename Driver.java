@@ -17,6 +17,7 @@ public class Driver {
     int totalMilesDriven;
     int hours;
     int minutes;
+    int totalNumberOfGoldStarsRecieved;
     double totalAmountEarned;
     double operationCosts;
     Location currentLocation;
@@ -81,9 +82,10 @@ public class Driver {
       sb.append("\t Rides rejected: " + this.numberOfFaresRejected + "\n");
       sb.append("\t Total Hours & Minutes: " + this.minutes/60 + ":" + this.minutes%60 + "\n");
       sb.append("\t Total Miles: " + this.totalMilesDriven + "\n");
-      sb.append("\t Average Rating: \n");
+      int averageRating = this.totalNumberOfGoldStarsRecieved / this.numberOfFares;
+      sb.append("\t Average Rating: " + averageRating + "\n");
       sb.append("\t Total $ Paid: $\n");
-      sb.append("\t Net Amount Earned: $" + this.totalAmountEarned + "\n");
+      sb.append("\t Net Amount Earned: $" + "\n");
       sb.append("\t Operation Costs: \n");
       sb.append("\t\t Ownership: \n");
       sb.append("\t\t Operating: \n");

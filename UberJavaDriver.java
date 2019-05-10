@@ -82,9 +82,7 @@ public class UberJavaDriver {
           driver1.minutes += Integer.valueOf(minutes);
           ratingUrl = baseDomain + ratingUrl;
           System.out.println("Rating URL: " + ratingUrl);
-          // Get Ratings for ride
-          String response = APIHelper.get(ratingUrl);
-          System.out.println("Response is " + response);
+          driver1.totalNumberOfGoldStarsRecieved += getRatingForRide(ratingUrl);
           // Driver gets %75 of profit
           // driver1.totalAmountEarned += Double.valueOf(fareEarned)*.75;
         } else {
@@ -96,43 +94,6 @@ public class UberJavaDriver {
         System.out.println(driver1.name + " at end of Ride#" + rideNumber + ": total minutes = " + driver1.currentSession.numberOfMinutesElapsed +"; location = " + driver1.currentLocation);
       }
 
-      // while (driver2.currentSession.numberOfMinutesElapsed < numberOfMinutesInSession) {
-        // String fareDetails2 = APIHelper.get(baseNextFare + prateekDriver);
-        // fareDetails2 = fareDetails2.replaceAll("<p>", "");
-        // System.out.println(fareDetails2);
-        // String rideNumber2 = fareDetails2.substring(fareDetails2.indexOf("#" + 1), fareDetails2.indexOf("<br/")).replaceAll("#", "");
-        //
-        // String rideDetailsURL2 = fareDetails2.substring(fareDetails2.indexOf("\">") + 2, fareDetails2.indexOf("</a>"));
-        // String rideDetails2 = APIHelper.get(rideDetailsURL2).replaceAll("<br />", "");
-        // rideDetails2 = rideDetails2.replaceAll("</p>", "");
-        //
-        // System.out.println("Ride Number: " + rideNumber2);
-        // System.out.println("Ride Details: " + rideDetails2);
-        // String minutes2 = rideDetails2.substring(rideDetails2.indexOf("Minutes: ") + 9).replaceAll("\\s","");
-        // System.out.println("Minutes for fare: " + minutes2);
-
-        // Uberx Driver has different fare status
-        //driver1.currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes2);
-      // }
-
-      // while (driver1.currentSession.numberOfMinutesElapsed < 1140) {
-      //   String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung");
-      //   fareDetails = fareDetails.replaceAll("<p>", "");
-      //   System.out.println(fareDetails);
-      //   String rideNumber = fareDetails.substring(fareDetails.indexOf("#" + 1), fareDetails.indexOf("<br/")).replaceAll("#", "");
-      //
-      //   String rideDetailsURL = fareDetails.substring(fareDetails.indexOf("\">") + 2, fareDetails.indexOf("</a>"));
-      //   String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "");
-      //   rideDetails = rideDetails.replaceAll("</p>", "");
-      //
-      //   System.out.println("Ride Number: " + rideNumber);
-      //   System.out.println("Ride Details: " + rideDetails);
-      //   String minutes = rideDetails.substring(rideDetails.indexOf("Minutes: ") + 9).replaceAll("\\s","");
-      //   System.out.println("Minutes for fare: " + minutes);
-
-      //   driver1.currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes);
-      //   System.out.println(String.format("%d minutes has elapsed for current session ", driver1.currentSession.numberOfMinutesElapsed));
-      // }
       // Get Fares for Drivers
 
       System.out.println("");
@@ -140,13 +101,26 @@ public class UberJavaDriver {
       // When your last Driver ends, the main method should print for each driver the following information:
       System.out.println("Driver Statistics for last session");
       System.out.println(driver1);
-      System.out.println(driver2);
-      System.out.println(driver3);
+      // System.out.println(driver2);
+      // System.out.println(driver3);
 
     }
 
-    public void getWebPageData() {
+    static int getRatingForRide(String rideRatingsURL) {
+      String response = APIHelper.get(rideRatingsURL);
+      System.out.println("Ride rating response is " + response);
+      String findStr = "golden-star";
+      int lastIndex = 0;
+      int ratings = 0;
+      while(lastIndex != -1){
+          lastIndex = response.indexOf(findStr,lastIndex);
 
+          if(lastIndex != -1){
+              ratings++;
+              lastIndex += findStr.length();
+          }
+      }
+      return ratings;
     }
 
 }
