@@ -51,14 +51,6 @@ public class UberJavaDriver {
 
         System.out.println("Fare Amount: " + parseFare(fareDetails));
 
-        String urlRegex = "rating(.*)</a><br/>";
-        Matcher m2 = Pattern.compile(urlRegex).matcher(fareDetails);
-        final List<String> matches2 = new ArrayList<>();
-        while (m2.find()) {
-            matches2.add(m2.group(0));
-        }
-        String ratingUrl = matches2.get(0).split("\"")[0];
-        
         String rideDetailsURL = fareDetails.substring(fareDetails.indexOf("\">") + 2, fareDetails.indexOf("</a>"));
         String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
         // System.out.println("Ride Number: " + rideNumber);
@@ -75,9 +67,11 @@ public class UberJavaDriver {
           driver1.currentLocation = Location.getByName(toLocation);
           driver1.totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
           driver1.minutes += Integer.valueOf(minutes);
-          ratingUrl = baseDomain + ratingUrl;
-          System.out.println("Rating URL: " + ratingUrl);
-          driver1.totalNumberOfGoldStarsRecieved += getRatingForRide(ratingUrl);
+
+          // ratingUrl = baseDomain + ratingUrl;
+          // System.out.println("Rating URL: " + ratingUrl);
+
+          driver1.totalNumberOfGoldStarsRecieved += getRatingForRide(fareDetails);
           driver1.totalAmountEarned += parseFare(fareDetails);
           // Driver gets %75 of profit
           // driver1.totalAmountEarned += Double.valueOf(fareEarned)*.75;
@@ -102,8 +96,19 @@ public class UberJavaDriver {
 
     }
 
-    static int getRatingForRide(String rideRatingsURL) {
-      String response = APIHelper.get(rideRatingsURL);
+    static int getRatingForRide(String fareDetails) {
+
+      String urlRegex = "rating(.*)</a><br/>";
+      Matcher m2 = Pattern.compile(urlRegex).matcher(fareDetails);
+      final List<String> matches2 = new ArrayList<>();
+      while (m2.find()) {
+          matches2.add(m2.group(0));
+      }
+
+      String ratingUrl = matches2.get(0).split("\"")[0];
+      ratingUrl = baseDomain + ratingUrl;
+
+      String response = APIHelper.get(ratingUrl);
       System.out.println("Ride rating response is " + response);
       String findStr = "golden-star";
       int lastIndex = 0;
@@ -120,11 +125,7 @@ public class UberJavaDriver {
     }
 
     static Double parseFare(String fareResponse) {
-      //Breaks if name has '.' like K.C.
-      // String fareEarned = fareResponse.substring(fareResponse.indexOf("$") + 1, fareResponse.indexOf(".") + 3);
-      // fareEarned = fareEarned.replaceAll("<br/>", "");
-      // System.out.println("Fare Earned: " + fareEarned + "\n");
-
+      
       String dollarAmountRegex = "((-)?(\\$){1}(-)?\\d+.\\d+)";
 
       Pattern p = Pattern.compile(dollarAmountRegex);
@@ -133,15 +134,6 @@ public class UberJavaDriver {
         String dollarAmount = matcher.group();
         return Double.valueOf(dollarAmount.substring(dollarAmount.indexOf("$") + 1));
       }
-
-      // String urlDistanceRegex = "<a href=(.*)</a> ";
-      // Matcher m = Pattern.compile(urlDistanceRegex).matcher(fareResponse);
-      // final List<String> matches = new ArrayList<>();
-      // while (m.find()) {
-      //     matches.add(m.group(0));
-      // }
-      // System.out.println("Result of ride details");
-      // System.out.println(matches.get(0));
 
       return 0.0;
     }
