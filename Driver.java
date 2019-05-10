@@ -54,9 +54,11 @@ public class Driver {
       this.currentSession = new Session();
       this.currentSession.started = true;
 
-      while (this.currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && this.currentLocation.getName() != "San Fracisco") {
-        getNextFare();
-      }
+      do { getNextFare(); }
+      while (this.currentSession.numberOfMinutesElapsed < numberOfMinutesInSession
+              || (this.currentLocation.getName() != "San Francisco"));
+
+
 
       endSession();
 
@@ -89,11 +91,11 @@ public class Driver {
 
         this.numberOfFares++;
         currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes);
-        currentLocation = Location.getByName(toLocation);
-        totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
+        this.currentLocation = Location.getByName(toLocation);
+        this.totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
         minutes += Integer.valueOf(minutes);
-        totalNumberOfGoldStarsRecieved += APIHelper.rating(fareDetailsResponse);
-        totalAmountEarned += APIHelper.nextFare(fareDetailsResponse);
+        this.totalNumberOfGoldStarsRecieved += APIHelper.rating(fareDetailsResponse);
+        this.totalAmountEarned += APIHelper.nextFare(fareDetailsResponse);
 
         System.out.println(name + " at end of Ride#" + rideNumber + ": total minutes = " + currentSession.numberOfMinutesElapsed +"; location = " + currentLocation);
 
@@ -174,7 +176,7 @@ public class Driver {
       sb.append("\t\t Amenities: \n");
       sb.append("\t\t Total Cost of Operation: \n");
       sb.append("\t Effectively Hourly Rate: \n");
-      // sb.append("\t Current Location: " + this.currentLocation + "\n");
+      sb.append("\t Current Location: " + this.currentLocation + "\n");
 
       return sb.toString();
     }
