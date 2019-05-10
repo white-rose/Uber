@@ -24,10 +24,11 @@ public class Driver {
     UberStatistics uberStatistics;
     Session currentSession;
 
-    Driver(String name) {
+    Driver(String name, boolean isPremiumDriver) {
       this.name = name;
       this.currentLocation = Location.getByName("San Francisco");
       this.uberStatistics = new UberStatistics();
+      this.UberJavaXPremium = isPremiumDriver;
     }
 
     int startSession() throws IllegalStateException {
@@ -71,7 +72,11 @@ public class Driver {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder();
-      sb.append(this.name + "[UberXPremium] Statistics for Session#0" + "\n");
+      if (UberJavaXPremium) {
+        sb.append(this.name + "[UberXPremium] Statistics for Session#0" + "\n");
+      } else {
+        sb.append(this.name + "[Not UberXPremium] Statistics for Session#0" + "\n");
+      }
       sb.append("\t Number of Rides: " + this.numberOfFares + "\n");
       sb.append("\t Rides rejected: " + this.numberOfFaresRejected + "\n");
       sb.append("\t Total Hours & Minutes: " + this.minutes/60 + ":" + this.minutes%60 + "\n");

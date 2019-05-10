@@ -24,9 +24,9 @@ public class UberJavaDriver {
 
       // Get Riders
 
-      Driver driver1 = new Driver(naismithDriver);
-      Driver driver2 = new Driver(prateekDriver);
-      Driver driver3 = new Driver(baeSungDriver);
+      Driver driver1 = new Driver(baeSungDriver, false);
+      Driver driver2 = new Driver(naismithDriver, true);
+      Driver driver3 = new Driver(prateekDriver, true);
 
       // Start session for drivers
       driver1.startSession();
