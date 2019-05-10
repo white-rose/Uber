@@ -16,7 +16,6 @@ public class Driver {
 
     String name;
     boolean UberJavaXPremium;
-    int drivingTime;
     int numberOfFares;
     int numberOfFaresRejected;
     int totalMilesDriven;
@@ -81,7 +80,7 @@ public class Driver {
             minutes += Integer.valueOf(minutes);
             totalNumberOfGoldStarsRecieved += getRatingForRide(fareDetails);
             totalAmountEarned += parseFare(fareDetails);
-            
+
             System.out.println(name + " at end of Ride#" + rideNumber + ": total minutes = " + currentSession.numberOfMinutesElapsed +"; location = " + currentLocation);
 
           } else {
@@ -181,7 +180,7 @@ public class Driver {
       }
       sb.append("\t Number of Rides: " + this.numberOfFares + "\n");
       sb.append("\t Rides rejected: " + this.numberOfFaresRejected + "\n");
-      sb.append("\t Total Hours & Minutes: " + this.minutes/60 + ":" + this.minutes%60 + "\n");
+      sb.append("\t Total Hours & Minutes: " + this.currentSession.numberOfMinutesElapsed/60 + ":" + this.currentSession.numberOfMinutesElapsed%60 + "\n");
       sb.append("\t Total Miles: " + this.totalMilesDriven + "\n");
       int averageRating = this.totalNumberOfGoldStarsRecieved / this.numberOfFares;
       sb.append("\t Average Rating: " + averageRating + "\n");
