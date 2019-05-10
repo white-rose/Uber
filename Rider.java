@@ -11,4 +11,9 @@ public class Rider {
     this.name = name;
   }
 
+  @Override
+  public String toString() {
+    return "Statistics for Rider " + this.name;
+  }
+
 }

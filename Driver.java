@@ -5,10 +5,11 @@ import uberjava.UberStatistics;
 import uberjava.Session;
 import uberjava.UberStatistics;
 import uberjava.location.Location;
-import java.util.Random;
+import uberjava.Rider;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.regex.*;
+import java.util.Random;
 import java.util.*;
 
 public class Driver {
@@ -27,7 +28,7 @@ public class Driver {
     Car car;
     UberStatistics uberStatistics;
     Session currentSession;
-    ArrayList<Rider> riders = new ArrayList<Rider>();
+    Set<Rider> riders = new HashSet<Rider>();
 
     private static final String baseDomain = "https://www.cs.usfca.edu/~dhalperin/";
     private static final String baseNextFare = baseDomain + "nextFare.cgi?driver=";
@@ -66,10 +67,15 @@ public class Driver {
     }
 
     private void getNextFare() {
+
       // Call API to get next fare
       String fareDetailsResponse = APIHelper.get(baseNextFare + this.name).replaceAll("<p>", "");
       String rideDetailsURL = fareDetailsResponse.substring(fareDetailsResponse.indexOf("\">") + 2, fareDetailsResponse.indexOf("</a>"));
       String rideNumber = fareDetailsResponse.substring(fareDetailsResponse.indexOf("#" + 1), fareDetailsResponse.indexOf("<br/")).replaceAll("#", "");
+      String riderName = APIHelper.parseRider(fareDetailsResponse).replaceAll("Rider: ", "").replaceAll("</b>", "");
+      Rider rider = new Rider(riderName);
+      this.riders.add(rider);
+
       // Call API to get more details for ride number
       String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
       String minutesParsed = APIHelper.parseMinutes(rideDetails);

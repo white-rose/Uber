@@ -44,6 +44,15 @@ public class UberJavaDriver {
 
       System.out.println("\n");
       System.out.println("Rider Statistics");
+      for(Rider rider : driver1.riders) {
+        System.out.println(rider);
+      }
+      for(Rider rider : driver2.riders) {
+        System.out.println(rider);
+      }
+      for(Rider rider : driver3.riders) {
+        System.out.println(rider);
+      }
 
 
     }

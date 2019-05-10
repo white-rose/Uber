@@ -35,7 +35,7 @@ public class APIHelper {
       StringBuilder sb = new StringBuilder();
       String readLine;
       while ((readLine = br.readLine()) != null) {
-        // System.out.println(readLine);
+        System.out.println(readLine);
         sb.append(readLine);
       }
       return sb.toString();
@@ -100,16 +100,28 @@ public class APIHelper {
     return 0.0;
   }
 
+  static String parseRider(String rideDetailsResponse) {
+      String minutesRegex = "Rider: (.)*</b>";
+      Pattern p = Pattern.compile(minutesRegex);
+      Matcher matcher = p.matcher(rideDetailsResponse);
+      String minutes = "";
+      while (matcher.find()) {
+        minutes = matcher.group();
+      }
+
+      return minutes;
+  }
+
   static String parseMinutes(String fareResponse) {
-    String dollarAmountRegex = "Minutes: ([0-9])*";
-    Pattern p = Pattern.compile(dollarAmountRegex);
+    String minutesRegex = "Minutes: ([0-9])*";
+    Pattern p = Pattern.compile(minutesRegex);
     Matcher matcher = p.matcher(fareResponse);
-    String dollarAmount = "";
+    String minutes = "";
     while (matcher.find()) {
-      dollarAmount = matcher.group();
+      minutes = matcher.group();
     }
 
-    return dollarAmount;
+    return minutes;
   }
 
 }
