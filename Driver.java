@@ -76,6 +76,7 @@ public class Driver {
 
     @Override
     public String toString() {
+      DecimalFormat df2 = new DecimalFormat("#.##");
       StringBuilder sb = new StringBuilder();
       if (UberJavaXPremium) {
         sb.append(this.name + "[UberXPremium] Statistics for Session#0" + "\n");
@@ -88,8 +89,7 @@ public class Driver {
       sb.append("\t Total Miles: " + this.totalMilesDriven + "\n");
       int averageRating = this.totalNumberOfGoldStarsRecieved / this.numberOfFares;
       sb.append("\t Average Rating: " + averageRating + "\n");
-      sb.append("\t Total $ Paid: $" + totalAmountEarned + "\n");
-       DecimalFormat df2 = new DecimalFormat("#.##");
+      sb.append("\t Total $ Paid: $" + df2.format(totalAmountEarned) + "\n");
       sb.append("\t Net Amount Earned: $" + df2.format((totalAmountEarned*.75)) + "\n");
       sb.append("\t Operation Costs: \n");
       sb.append("\t\t Ownership: \n");
