@@ -28,7 +28,7 @@ public class Driver {
     Car car;
     UberStatistics uberStatistics;
     Session currentSession;
-    Set<Rider> riders = new HashSet<Rider>();
+    Map<String, Rider> riders = new HashMap<String, Rider>();
 
     private static final String baseDomain = "https://www.cs.usfca.edu/~dhalperin/";
     private static final String baseNextFare = baseDomain + "nextFare.cgi?driver=";
@@ -72,9 +72,9 @@ public class Driver {
       String fareDetailsResponse = APIHelper.get(baseNextFare + this.name).replaceAll("<p>", "");
       String rideDetailsURL = fareDetailsResponse.substring(fareDetailsResponse.indexOf("\">") + 2, fareDetailsResponse.indexOf("</a>"));
       String rideNumber = fareDetailsResponse.substring(fareDetailsResponse.indexOf("#" + 1), fareDetailsResponse.indexOf("<br/")).replaceAll("#", "");
-      String riderName = APIHelper.parseRider(fareDetailsResponse).replaceAll("Rider: ", "").replaceAll("</b>", "");
-      Rider rider = new Rider(riderName);
-      this.riders.add(rider);
+
+      // Get RiderDetails
+      parseRiderAndAdd(fareDetailsResponse);
 
       // Call API to get more details for ride number
       String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
@@ -103,6 +103,21 @@ public class Driver {
         numberOfFaresRejected++;
         // Notify Dispatcher of rejected ride;
       }
+    }
+
+    private void parseRiderAndAdd(String fareDetailsResponse) {
+      String riderName = APIHelper.parseRider(fareDetailsResponse).replaceAll("Rider: ", "").replaceAll("</b>", "");
+      Rider rider = new Rider(riderName);
+
+      if (this.riders.containsKey(rider.name)) {
+        Rider riderFound = this.riders.get(rider.name);
+        riderFound.numberOfRides++;
+        this.riders.put(rider.name, riderFound);
+      } else {
+        rider.numberOfRides++;
+      }
+
+      riders.put(riderName, rider);
     }
 
     int endSession() throws IllegalStateException {
@@ -160,7 +175,7 @@ public class Driver {
       sb.append("\t\t Amenities: \n");
       sb.append("\t\t Total Cost of Operation: \n");
       sb.append("\t Effectively Hourly Rate: \n");
-      sb.append("\t Current Location: " + this.currentLocation + "\n");
+      // sb.append("\t Current Location: " + this.currentLocation + "\n");
 
       return sb.toString();
     }
