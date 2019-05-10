@@ -10,7 +10,6 @@ import java.util.Random;
 public class Driver {
 
     String name;
-    Location currentLocation;
     boolean UberJavaXPremium;
     int drivingTime;
     int numberOfFares;
@@ -20,6 +19,7 @@ public class Driver {
     int minutes;
     double totalAmountEarned;
     double operationCosts;
+    Location currentLocation;
     Car car;
     UberStatistics uberStatistics;
     Session currentSession;
@@ -85,6 +85,12 @@ public class Driver {
       sb.append("\t Total $ Paid: $\n");
       sb.append("\t Net Amount Earned: $" + this.totalAmountEarned + "\n");
       sb.append("\t Operation Costs: \n");
+      sb.append("\t\t Ownership: \n");
+      sb.append("\t\t Operating: \n");
+      sb.append("\t\t Gas: \n");
+      sb.append("\t\t Tolls: \n");
+      sb.append("\t\t Amenities: \n");
+      sb.append("\t\t Total Cost of Operation: \n");
       sb.append("\t Effectively Hourly Rate: \n");
 
       return sb.toString();
