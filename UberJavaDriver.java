@@ -10,9 +10,9 @@ import java.util.*;
 
 public class UberJavaDriver {
 
-  private static final String naismithDriver = "James Naismith";
+  private static final String naismithDriver = "James+Naismith";
   private static final String prateekDriver = "Prateek";
-  private static final String baeSungDriver = "Bae Sung";
+  private static final String baeSungDriver = "Bae+Sung";
 
     public static void main(String [] args) {
 
@@ -31,8 +31,8 @@ public class UberJavaDriver {
 
       // Start session for drivers
       driver1.startSession();
-      driver2.startSession();
-      driver3.startSession();
+      // driver2.startSession();
+      // driver3.startSession();
 
       System.out.println("");
 
@@ -41,6 +41,10 @@ public class UberJavaDriver {
       System.out.println(driver1);
       System.out.println(driver2);
       System.out.println(driver3);
+
+      System.out.println("\n");
+      System.out.println("Rider Statistics");
+
 
     }
 

@@ -53,35 +53,8 @@ public class Driver {
       this.currentSession = new Session();
       this.currentSession.started = true;
 
-      while (currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && currentLocation.getName() != "San Fracisco") {
-          String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung").replaceAll("<p>", "");
-          String rideNumber = fareDetails.substring(fareDetails.indexOf("#" + 1), fareDetails.indexOf("<br/")).replaceAll("#", "");
-          String rideDetailsURL = fareDetails.substring(fareDetails.indexOf("\">") + 2, fareDetails.indexOf("</a>"));
-          String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
-          // System.out.println("Ride Number: " + rideNumber);
-          String minutes = rideDetails.substring(rideDetails.indexOf("Minutes: ") + 9).replaceAll("\\s","");
-          String toLocation = rideDetails.substring(rideDetails.indexOf("To: ") + 4, rideDetails.indexOf("Distance:"));
-          toLocation = toLocation.replaceAll("<br/>", "").trim();
-          String numberOfMilesForFare = rideDetails.substring(rideDetails.indexOf("Distance: ") + 10, rideDetails.indexOf("miles")).replaceAll("\\s","");
-
-          // Fares can only be accepted if it takes 300 minutes or less
-          if (Integer.valueOf(minutes) <= numberOfMinutesAcceptableToAccept) {
-
-            numberOfFares++;
-            currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes);
-            currentLocation = Location.getByName(toLocation);
-            totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
-            minutes += Integer.valueOf(minutes);
-            totalNumberOfGoldStarsRecieved += APIHelper.getRatingForRide(fareDetails);
-            totalAmountEarned += APIHelper.parseFare(fareDetails);
-
-            System.out.println(name + " at end of Ride#" + rideNumber + ": total minutes = " + currentSession.numberOfMinutesElapsed +"; location = " + currentLocation);
-
-          } else {
-            // System.out.println(String.format("Ride# " + rideNumber + " has been rejected since it takes %s minutes", minutes));
-            numberOfFaresRejected++;
-            // Notify Dispatcher of rejected ride;
-          }
+      while (this.currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && this.currentLocation.getName() != "San Fracisco") {
+        getNextFare();
       }
 
       endSession();
@@ -92,8 +65,37 @@ public class Driver {
 
     }
 
-    void getFare() {
+    private void getNextFare() {
+      // Call API to get next fare
+      String fareDetailsResponse = APIHelper.get(baseNextFare + this.name).replaceAll("<p>", "");
+      String rideDetailsURL = fareDetailsResponse.substring(fareDetailsResponse.indexOf("\">") + 2, fareDetailsResponse.indexOf("</a>"));
 
+      // Call API to get more details for ride number
+      String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
+      String rideNumber = fareDetailsResponse.substring(fareDetailsResponse.indexOf("#" + 1), fareDetailsResponse.indexOf("<br/")).replaceAll("#", "");
+      String minutes = rideDetails.substring(rideDetails.indexOf("Minutes: ") + 9).replaceAll("\\s","");
+      String toLocation = rideDetails.substring(rideDetails.indexOf("To: ") + 4, rideDetails.indexOf("Distance:"));
+      toLocation = toLocation.replaceAll("<br/>", "").trim();
+      String numberOfMilesForFare = rideDetails.substring(rideDetails.indexOf("Distance: ") + 10, rideDetails.indexOf("miles")).replaceAll("\\s","");
+
+      // Fares can only be accepted if it takes 300 minutes or less
+      if (Integer.valueOf(minutes) <= numberOfMinutesAcceptableToAccept) {
+
+        numberOfFares++;
+        currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes);
+        currentLocation = Location.getByName(toLocation);
+        totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
+        minutes += Integer.valueOf(minutes);
+        totalNumberOfGoldStarsRecieved += APIHelper.getRatingForRide(fareDetailsResponse);
+        totalAmountEarned += APIHelper.parseFare(fareDetailsResponse);
+
+        System.out.println(name + " at end of Ride#" + rideNumber + ": total minutes = " + currentSession.numberOfMinutesElapsed +"; location = " + currentLocation);
+
+      } else {
+        // System.out.println(String.format("Ride# " + rideNumber + " has been rejected since it takes %s minutes", minutes));
+        numberOfFaresRejected++;
+        // Notify Dispatcher of rejected ride;
+      }
     }
 
     int endSession() throws IllegalStateException {
