@@ -35,10 +35,6 @@ public class Driver {
     private static final String baseReject = baseDomain + "reject.cgi?rideNumber=";
     private static final String baseRating = baseDomain + "rating.cgi?rideNumber=";
 
-    private static final String naismithDriver = "James Naismith";
-    private static final String prateekDriver = "Prateek";
-    private static final String baeSungDriver = "Bae Sung";
-
     private static final int numberOfMinutesInSession = 1440;
     private static final int numberOfMinutesAcceptableToAccept = 300;
 
@@ -57,7 +53,7 @@ public class Driver {
       this.currentSession = new Session();
       this.currentSession.started = true;
 
-        while (currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && currentLocation.getName() != "San Fracisco") {
+      while (currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && currentLocation.getName() != "San Fracisco") {
           String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung").replaceAll("<p>", "");
           String rideNumber = fareDetails.substring(fareDetails.indexOf("#" + 1), fareDetails.indexOf("<br/")).replaceAll("#", "");
           String rideDetailsURL = fareDetails.substring(fareDetails.indexOf("\">") + 2, fareDetails.indexOf("</a>"));
@@ -86,15 +82,13 @@ public class Driver {
             numberOfFaresRejected++;
             // Notify Dispatcher of rejected ride;
           }
+      }
 
-          }
-          
-          endSession();
+      endSession();
 
-          return this.currentSession.sessionNumber;
+      return this.currentSession.sessionNumber;
 
-        // End Session Code here
-
+      // End Session Code here
 
     }
 

@@ -9,19 +9,9 @@ import uberjava.vehicle.Car;
 
 public class UberJavaDriver {
 
-  private static final String baseDomain = "https://www.cs.usfca.edu/~dhalperin/";
-  private static final String baseNextFare = baseDomain + "nextFare.cgi?driver=";
-  private static final String baseRideNumber = baseDomain + "uberdistance.cgi?riderNumber=";
-  private static final String baseReject = baseDomain + "reject.cgi?rideNumber=";
-  private static final String baseRating = baseDomain + "rating.cgi?rideNumber=";
-
   private static final String naismithDriver = "James Naismith";
   private static final String prateekDriver = "Prateek";
   private static final String baeSungDriver = "Bae Sung";
-
-  private static final int numberOfMinutesInSession = 1440;
-  private static final int numberOfMinutesAcceptableToAccept = 300;
-
 
     public static void main(String [] args) {
 
