@@ -106,7 +106,6 @@ public class UberJavaDriver {
       ratingUrl = baseDomain + ratingUrl;
 
       String response = APIHelper.get(ratingUrl);
-      System.out.println("Ride rating response is " + response);
       String findStr = "golden-star";
       int lastIndex = 0;
       int ratings = 0;
