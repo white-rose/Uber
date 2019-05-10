@@ -92,8 +92,8 @@ public class Driver {
         currentLocation = Location.getByName(toLocation);
         totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
         minutes += Integer.valueOf(minutes);
-        totalNumberOfGoldStarsRecieved += APIHelper.getRatingForRide(fareDetailsResponse);
-        totalAmountEarned += APIHelper.parseFare(fareDetailsResponse);
+        totalNumberOfGoldStarsRecieved += APIHelper.rating(fareDetailsResponse);
+        totalAmountEarned += APIHelper.nextFare(fareDetailsResponse);
 
         System.out.println(name + " at end of Ride#" + rideNumber + ": total minutes = " + currentSession.numberOfMinutesElapsed +"; location = " + currentLocation);
 

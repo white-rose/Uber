@@ -61,7 +61,7 @@ public class APIHelper {
     }
   }
 
-  static int getRatingForRide(String rideResponse) {
+  static int rating(String rideResponse) {
 
     String urlRegex = "rating(.*)</a><br/>";
     Matcher m2 = Pattern.compile(urlRegex).matcher(rideResponse);
@@ -88,7 +88,7 @@ public class APIHelper {
     return ratings;
   }
 
-  static Double parseFare(String fareResponse) {
+  static Double nextFare(String fareResponse) {
     String dollarAmountRegex = "((-)?(\\$){1}(-)?\\d+.\\d+)";
     Pattern p = Pattern.compile(dollarAmountRegex);
     Matcher matcher = p.matcher(fareResponse);
