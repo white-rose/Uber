@@ -57,8 +57,6 @@ public class Driver {
       this.currentSession = new Session();
       this.currentSession.started = true;
 
-        // Start Session Code here
-
         while (currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && currentLocation.getName() != "San Fracisco") {
           String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung").replaceAll("<p>", "");
           String rideNumber = fareDetails.substring(fareDetails.indexOf("#" + 1), fareDetails.indexOf("<br/")).replaceAll("#", "");
@@ -90,6 +88,8 @@ public class Driver {
           }
 
           }
+          
+          endSession();
 
           return this.currentSession.sessionNumber;
 
@@ -194,6 +194,7 @@ public class Driver {
       sb.append("\t\t Amenities: \n");
       sb.append("\t\t Total Cost of Operation: \n");
       sb.append("\t Effectively Hourly Rate: \n");
+      sb.append("\t Current Location: " + this.currentLocation + "\n");
 
       return sb.toString();
     }
