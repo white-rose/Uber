@@ -28,11 +28,12 @@ public class Driver {
     UberStatistics uberStatistics;
     Session currentSession;
 
-    Driver(String name, boolean isPremiumDriver) {
+    Driver(String name, boolean isPremiumDriver, Car car) {
       this.name = name;
       this.currentLocation = Location.getByName("San Francisco");
       this.uberStatistics = new UberStatistics();
       this.UberJavaXPremium = isPremiumDriver;
+      this.car = car;
     }
 
     int startSession() throws IllegalStateException {

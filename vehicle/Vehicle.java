@@ -2,27 +2,21 @@ package uberjava.vehicle;
 
 import uberjava.location.Location;
 
+import uberjava.location.Location;
+
 public abstract class Vehicle {
 
-    String currentLocation;
+    private Location currentLocation;
 
-    public Vehicle() {
-
-    }
-
-    public Vehicle(String startingLocation) {
-
-    }
-
-    public Vehicle(String name, int year, String make) {
-
-    }
-
-    public Vehicle(String name, int year, String make, Location location) {
-
+    public Vehicle(Location startingLocation) {
+      currentLocation = startingLocation;
     }
 
     boolean driveTo(Location newLocation) {
+      if (currentLocation != newLocation) {
+        currentLocation = newLocation;
+        return true;
+      }
       return false;
     }
 

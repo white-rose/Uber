@@ -5,6 +5,7 @@ import uberjava.APIHelper;
 import uberjava.location.Location;
 import java.util.regex.*;
 import java.util.*;
+import uberjava.vehicle.Car;
 
 public class UberJavaDriver {
 
@@ -14,7 +15,7 @@ public class UberJavaDriver {
   private static final String baseReject = baseDomain + "reject.cgi?rideNumber=";
   private static final String baseRating = baseDomain + "rating.cgi?rideNumber=";
 
-  private static final String naismithDriver = "Naismith";
+  private static final String naismithDriver = "James Naismith";
   private static final String prateekDriver = "Prateek";
   private static final String baeSungDriver = "Bae Sung";
 
@@ -24,11 +25,17 @@ public class UberJavaDriver {
 
     public static void main(String [] args) {
 
-      // Get Riders
+      // Get Riders and their cards
+      Car lambo = new Car("Urus", 2019, "Lamborghini", 1000000, 10.0);
+      Driver driver1 = new Driver(baeSungDriver, false, lambo);
 
-      Driver driver1 = new Driver(baeSungDriver, false);
-      Driver driver2 = new Driver(naismithDriver, true);
-      Driver driver3 = new Driver(prateekDriver, true);
+      // James drives a 2018 Porsche 911 Turbo S Cabriole that cost $200,400
+      Car porcheCabriole = new Car("Cabriole", 2018, "Porsche", 200400, 102.0);
+      Driver driver2 = new Driver(naismithDriver, true, porcheCabriole);
+
+      // Prateek drives a 2019 Tesla Roadster that cost $219,800.
+      Car teslaRoadster = new Car("Roadster", 2019, "Tesla", 219800, 11.5);
+      Driver driver3 = new Driver(prateekDriver, true, teslaRoadster);
 
       // Start session for drivers
       driver1.startSession();
@@ -51,6 +58,7 @@ public class UberJavaDriver {
             matches2.add(m2.group(0));
         }
         String ratingUrl = matches2.get(0).split("\"")[0];
+        
         String rideDetailsURL = fareDetails.substring(fareDetails.indexOf("\">") + 2, fareDetails.indexOf("</a>"));
         String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
         // System.out.println("Ride Number: " + rideNumber);
