@@ -6,6 +6,9 @@ import uberjava.Session;
 import uberjava.UberStatistics;
 import uberjava.location.Location;
 import java.util.Random;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 
 public class Driver {
 
@@ -84,8 +87,9 @@ public class Driver {
       sb.append("\t Total Miles: " + this.totalMilesDriven + "\n");
       int averageRating = this.totalNumberOfGoldStarsRecieved / this.numberOfFares;
       sb.append("\t Average Rating: " + averageRating + "\n");
-      sb.append("\t Total $ Paid: $\n");
-      sb.append("\t Net Amount Earned: $" + "\n");
+      sb.append("\t Total $ Paid: $" + totalAmountEarned + "\n");
+       DecimalFormat df2 = new DecimalFormat("#.##");
+      sb.append("\t Net Amount Earned: $" + df2.format((totalAmountEarned*.75)) + "\n");
       sb.append("\t Operation Costs: \n");
       sb.append("\t\t Ownership: \n");
       sb.append("\t\t Operating: \n");
