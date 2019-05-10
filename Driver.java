@@ -11,7 +11,6 @@ import java.text.DecimalFormat;
 import java.util.regex.*;
 import java.util.*;
 
-
 public class Driver {
 
     String name;
@@ -28,6 +27,7 @@ public class Driver {
     Car car;
     UberStatistics uberStatistics;
     Session currentSession;
+    ArrayList<Rider> riders = new ArrayList<Rider>();
 
     private static final String baseDomain = "https://www.cs.usfca.edu/~dhalperin/";
     private static final String baseNextFare = baseDomain + "nextFare.cgi?driver=";
@@ -72,13 +72,13 @@ public class Driver {
             currentLocation = Location.getByName(toLocation);
             totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
             minutes += Integer.valueOf(minutes);
-            totalNumberOfGoldStarsRecieved += getRatingForRide(fareDetails);
-            totalAmountEarned += parseFare(fareDetails);
+            totalNumberOfGoldStarsRecieved += APIHelper.getRatingForRide(fareDetails);
+            totalAmountEarned += APIHelper.parseFare(fareDetails);
 
             System.out.println(name + " at end of Ride#" + rideNumber + ": total minutes = " + currentSession.numberOfMinutesElapsed +"; location = " + currentLocation);
 
           } else {
-            System.out.println(String.format("Ride# " + rideNumber + " has been rejected since it takes %s minutes", minutes));
+            // System.out.println(String.format("Ride# " + rideNumber + " has been rejected since it takes %s minutes", minutes));
             numberOfFaresRejected++;
             // Notify Dispatcher of rejected ride;
           }
@@ -89,6 +89,10 @@ public class Driver {
       return this.currentSession.sessionNumber;
 
       // End Session Code here
+
+    }
+
+    void getFare() {
 
     }
 
@@ -120,47 +124,6 @@ public class Driver {
 
     Location getCurrentLocation() {
       return this.currentLocation;
-    }
-
-    static int getRatingForRide(String fareDetails) {
-
-      String urlRegex = "rating(.*)</a><br/>";
-      Matcher m2 = Pattern.compile(urlRegex).matcher(fareDetails);
-      final List<String> matches2 = new ArrayList<>();
-      while (m2.find()) {
-          matches2.add(m2.group(0));
-      }
-
-      String ratingUrl = matches2.get(0).split("\"")[0];
-      ratingUrl = baseDomain + ratingUrl;
-
-      String response = APIHelper.get(ratingUrl);
-      String findStr = "golden-star";
-      int lastIndex = 0;
-      int ratings = 0;
-      while(lastIndex != -1){
-          lastIndex = response.indexOf(findStr,lastIndex);
-
-          if(lastIndex != -1){
-              ratings++;
-              lastIndex += findStr.length();
-          }
-      }
-      return ratings;
-    }
-
-    static Double parseFare(String fareResponse) {
-
-      String dollarAmountRegex = "((-)?(\\$){1}(-)?\\d+.\\d+)";
-
-      Pattern p = Pattern.compile(dollarAmountRegex);
-      Matcher matcher = p.matcher(fareResponse);
-      while (matcher.find()) {
-        String dollarAmount = matcher.group();
-        return Double.valueOf(dollarAmount.substring(dollarAmount.indexOf("$") + 1));
-      }
-
-      return 0.0;
     }
 
     @Override

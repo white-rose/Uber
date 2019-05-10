@@ -3,9 +3,10 @@ package uberjava;
 import uberjava.Driver;
 import uberjava.APIHelper;
 import uberjava.location.Location;
+import uberjava.Rider;
+import uberjava.vehicle.Car;
 import java.util.regex.*;
 import java.util.*;
-import uberjava.vehicle.Car;
 
 public class UberJavaDriver {
 
