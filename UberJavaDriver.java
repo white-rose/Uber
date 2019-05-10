@@ -48,9 +48,6 @@ public class UberJavaDriver {
       while (driver1.currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && driver1.currentLocation.getName() != "San Fracisco") {
         String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung").replaceAll("<p>", "");
         String rideNumber = fareDetails.substring(fareDetails.indexOf("#" + 1), fareDetails.indexOf("<br/")).replaceAll("#", "");
-
-        System.out.println("Fare Amount: " + parseFare(fareDetails));
-
         String rideDetailsURL = fareDetails.substring(fareDetails.indexOf("\">") + 2, fareDetails.indexOf("</a>"));
         String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
         // System.out.println("Ride Number: " + rideNumber);
@@ -125,7 +122,7 @@ public class UberJavaDriver {
     }
 
     static Double parseFare(String fareResponse) {
-      
+
       String dollarAmountRegex = "((-)?(\\$){1}(-)?\\d+.\\d+)";
 
       Pattern p = Pattern.compile(dollarAmountRegex);
