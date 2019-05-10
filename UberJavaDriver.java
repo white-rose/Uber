@@ -31,16 +31,16 @@ public class UberJavaDriver {
 
       // Start session for drivers
       driver1.startSession();
-      // driver2.startSession();
-      // driver3.startSession();
+      driver2.startSession();
+      driver3.startSession();
 
       System.out.println("");
 
       // When your last Driver ends, the main method should print for each driver the following information:
       System.out.println("Driver Statistics for last session");
       System.out.println(driver1);
-      // System.out.println(driver2);
-      // System.out.println(driver3);
+      System.out.println(driver2);
+      System.out.println(driver3);
 
       System.out.println("\n");
       System.out.println("Rider Statistics");

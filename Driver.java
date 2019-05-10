@@ -69,11 +69,12 @@ public class Driver {
       // Call API to get next fare
       String fareDetailsResponse = APIHelper.get(baseNextFare + this.name).replaceAll("<p>", "");
       String rideDetailsURL = fareDetailsResponse.substring(fareDetailsResponse.indexOf("\">") + 2, fareDetailsResponse.indexOf("</a>"));
-
+      String rideNumber = fareDetailsResponse.substring(fareDetailsResponse.indexOf("#" + 1), fareDetailsResponse.indexOf("<br/")).replaceAll("#", "");
       // Call API to get more details for ride number
       String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
-      String rideNumber = fareDetailsResponse.substring(fareDetailsResponse.indexOf("#" + 1), fareDetailsResponse.indexOf("<br/")).replaceAll("#", "");
-      String minutes = rideDetails.substring(rideDetails.indexOf("Minutes: ") + 9).replaceAll("\\s","");
+      String minutesParsed = APIHelper.parseMinutes(rideDetails);
+      String minutes = minutesParsed.replaceAll("Minutes: ", "");
+      // String minutes = rideDetails.substring(rideDetails.indexOf("Minutes: ") + 9).replaceAll("\\s","");
       String toLocation = rideDetails.substring(rideDetails.indexOf("To: ") + 4, rideDetails.indexOf("Distance:"));
       toLocation = toLocation.replaceAll("<br/>", "").trim();
       String numberOfMilesForFare = rideDetails.substring(rideDetails.indexOf("Distance: ") + 10, rideDetails.indexOf("miles")).replaceAll("\\s","");

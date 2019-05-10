@@ -100,4 +100,16 @@ public class APIHelper {
     return 0.0;
   }
 
+  static String parseMinutes(String fareResponse) {
+    String dollarAmountRegex = "Minutes: ([0-9])*";
+    Pattern p = Pattern.compile(dollarAmountRegex);
+    Matcher matcher = p.matcher(fareResponse);
+    String dollarAmount = "";
+    while (matcher.find()) {
+      dollarAmount = matcher.group();
+    }
+
+    return dollarAmount;
+  }
+
 }
