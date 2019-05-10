@@ -2,10 +2,10 @@ package uberjava;
 
 import uberjava.Driver;
 import uberjava.APIHelper;
+import uberjava.location.Location;
 
 public class UberJavaDriver {
 
-  // URL's
   private static final String baseDomain = "https://www.cs.usfca.edu/~dhalperin/";
   private static final String baseNextFare = baseDomain + "nextFare.cgi?driver=";
   private static final String baseRideNumber = baseDomain + "uberdistance.cgi?riderNumber=";
@@ -39,26 +39,28 @@ public class UberJavaDriver {
       while (driver1.currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && driver1.currentLocation.getName() != "San Fracisco") {
         String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung").replaceAll("<p>", "");;
         String rideNumber = fareDetails.substring(fareDetails.indexOf("#" + 1), fareDetails.indexOf("<br/")).replaceAll("#", "");
-        String fareEarned = fareDetails.substring(fareDetails.indexOf("$") + 1, fareDetails.indexOf(".") + 3);
-        fareEarned = fareEarned.replaceAll("<br/>", "");
-        System.out.println("Fare Earned: " + fareEarned + "\n");
+        // Breaks if name has '.' like K.C.
+        // String fareEarned = fareDetails.substring(fareDetails.indexOf("$") + 1, fareDetails.indexOf(".") + 3);
+        // fareEarned = fareEarned.replaceAll("<br/>", "");
+        // System.out.println("Fare Earned: " + fareEarned + "\n");
 
         String rideDetailsURL = fareDetails.substring(fareDetails.indexOf("\">") + 2, fareDetails.indexOf("</a>"));
         String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
         // System.out.println("Ride Number: " + rideNumber);
         String minutes = rideDetails.substring(rideDetails.indexOf("Minutes: ") + 9).replaceAll("\\s","");
-        String toLocation = rideDetails.substring(rideDetails.indexOf("To: ") + 4, rideDetails.indexOf("Distance:")).replaceAll("\\s","").replaceAll("<br/>", "");
+        String toLocation = rideDetails.substring(rideDetails.indexOf("To: ") + 4, rideDetails.indexOf("Distance:"));
+        toLocation = toLocation.replaceAll("<br/>", "").trim();
         String numberOfMilesForFare = rideDetails.substring(rideDetails.indexOf("Distance: ") + 10, rideDetails.indexOf("miles")).replaceAll("\\s","");
 
         // Fares can only be accepted if it takes 300 minutes or less
         if (Integer.valueOf(minutes) <= numberOfMinutesAcceptableToAccept) {
           driver1.numberOfFares++;
           driver1.currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes);
-          driver1.currentLocation = new Location(toLocation);
+          driver1.currentLocation = Location.getByName(toLocation);
           driver1.totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
           driver1.minutes += Integer.valueOf(minutes);
           // Driver gets %75 of profit
-          driver1.totalAmountEarned += Double.valueOf(fareEarned)*.75;
+          // driver1.totalAmountEarned += Double.valueOf(fareEarned)*.75;
         } else {
           System.out.println(String.format("Ride# " + rideNumber + " has been rejected since it takes %s minutes", minutes));
           driver1.numberOfFaresRejected++;

@@ -1,13 +1,13 @@
 package uberjava.vehicle;
 
-import uberjava.Location;
+import uberjava.location.Location;
 
 public abstract class Vehicle {
 
     String currentLocation;
 
     public Vehicle() {
-      
+
     }
 
     public Vehicle(String startingLocation) {

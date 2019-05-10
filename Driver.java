@@ -4,6 +4,7 @@ import uberjava.vehicle.Car;
 import uberjava.UberStatistics;
 import uberjava.Session;
 import uberjava.UberStatistics;
+import uberjava.location.Location;
 import java.util.Random;
 
 public class Driver {
@@ -25,7 +26,7 @@ public class Driver {
 
     Driver(String name) {
       this.name = name;
-      this.currentLocation = new Location("San Francisco");
+      this.currentLocation = Location.getByName("San Francisco");
       this.uberStatistics = new UberStatistics();
     }
 
