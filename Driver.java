@@ -81,7 +81,7 @@ public class Driver {
       // Fares can only be accepted if it takes 300 minutes or less
       if (Integer.valueOf(minutes) <= numberOfMinutesAcceptableToAccept) {
 
-        numberOfFares++;
+        this.numberOfFares++;
         currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes);
         currentLocation = Location.getByName(toLocation);
         totalMilesDriven += Integer.valueOf(numberOfMilesForFare);

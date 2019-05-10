@@ -39,8 +39,8 @@ public class UberJavaDriver {
       // When your last Driver ends, the main method should print for each driver the following information:
       System.out.println("Driver Statistics for last session");
       System.out.println(driver1);
-      System.out.println(driver2);
-      System.out.println(driver3);
+      // System.out.println(driver2);
+      // System.out.println(driver3);
 
       System.out.println("\n");
       System.out.println("Rider Statistics");
