@@ -18,7 +18,7 @@ public class UberJavaDriver {
 
       // Get Riders and their cards
       // Bae Sung drives a Lamborghini
-      Car lambo = new Car("Urus", 2019, "Lamborghini", 1000000, 10.0);
+      Car lambo = new Car("Camaro", 2019, "Chevrolet", 40000, 10.0);
       Driver driver1 = new Driver(baeSungDriver, false, lambo);
 
       // James drives a 2018 Porsche 911 Turbo S Cabriole that cost $200,400
