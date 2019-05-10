@@ -8,6 +8,8 @@ import uberjava.location.Location;
 import java.util.Random;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.regex.*;
+import java.util.*;
 
 
 public class Driver {
@@ -28,6 +30,19 @@ public class Driver {
     UberStatistics uberStatistics;
     Session currentSession;
 
+    private static final String baseDomain = "https://www.cs.usfca.edu/~dhalperin/";
+    private static final String baseNextFare = baseDomain + "nextFare.cgi?driver=";
+    private static final String baseRideNumber = baseDomain + "uberdistance.cgi?riderNumber=";
+    private static final String baseReject = baseDomain + "reject.cgi?rideNumber=";
+    private static final String baseRating = baseDomain + "rating.cgi?rideNumber=";
+
+    private static final String naismithDriver = "James Naismith";
+    private static final String prateekDriver = "Prateek";
+    private static final String baeSungDriver = "Bae Sung";
+
+    private static final int numberOfMinutesInSession = 1440;
+    private static final int numberOfMinutesAcceptableToAccept = 300;
+
     Driver(String name, boolean isPremiumDriver, Car car) {
       this.name = name;
       this.currentLocation = Location.getByName("San Francisco");
@@ -37,11 +52,51 @@ public class Driver {
     }
 
     int startSession() throws IllegalStateException {
-        if (this.currentSession != null)
-          throw new IllegalStateException();
-        this.currentSession = new Session();
-        this.currentSession.started = true;
-        return this.currentSession.sessionNumber;
+
+      if (this.currentSession != null)
+        throw new IllegalStateException();
+      this.currentSession = new Session();
+      this.currentSession.started = true;
+
+        // Start Session Code here
+
+        while (currentSession.numberOfMinutesElapsed < numberOfMinutesInSession && currentLocation.getName() != "San Fracisco") {
+          String fareDetails = APIHelper.get(baseNextFare + "Bae+Sung").replaceAll("<p>", "");
+          String rideNumber = fareDetails.substring(fareDetails.indexOf("#" + 1), fareDetails.indexOf("<br/")).replaceAll("#", "");
+          String rideDetailsURL = fareDetails.substring(fareDetails.indexOf("\">") + 2, fareDetails.indexOf("</a>"));
+          String rideDetails = APIHelper.get(rideDetailsURL).replaceAll("<br />", "").replaceAll("</p>", "");
+          // System.out.println("Ride Number: " + rideNumber);
+          String minutes = rideDetails.substring(rideDetails.indexOf("Minutes: ") + 9).replaceAll("\\s","");
+          String toLocation = rideDetails.substring(rideDetails.indexOf("To: ") + 4, rideDetails.indexOf("Distance:"));
+          toLocation = toLocation.replaceAll("<br/>", "").trim();
+          String numberOfMilesForFare = rideDetails.substring(rideDetails.indexOf("Distance: ") + 10, rideDetails.indexOf("miles")).replaceAll("\\s","");
+
+          // Fares can only be accepted if it takes 300 minutes or less
+          if (Integer.valueOf(minutes) <= numberOfMinutesAcceptableToAccept) {
+
+            numberOfFares++;
+            currentSession.numberOfMinutesElapsed += Integer.valueOf(minutes);
+            currentLocation = Location.getByName(toLocation);
+            totalMilesDriven += Integer.valueOf(numberOfMilesForFare);
+            minutes += Integer.valueOf(minutes);
+            totalNumberOfGoldStarsRecieved += getRatingForRide(fareDetails);
+            totalAmountEarned += parseFare(fareDetails);
+            
+            System.out.println(name + " at end of Ride#" + rideNumber + ": total minutes = " + currentSession.numberOfMinutesElapsed +"; location = " + currentLocation);
+
+          } else {
+            System.out.println(String.format("Ride# " + rideNumber + " has been rejected since it takes %s minutes", minutes));
+            numberOfFaresRejected++;
+            // Notify Dispatcher of rejected ride;
+          }
+
+          }
+
+          return this.currentSession.sessionNumber;
+
+        // End Session Code here
+
+
     }
 
     int endSession() throws IllegalStateException {
@@ -72,6 +127,47 @@ public class Driver {
 
     Location getCurrentLocation() {
       return this.currentLocation;
+    }
+
+    static int getRatingForRide(String fareDetails) {
+
+      String urlRegex = "rating(.*)</a><br/>";
+      Matcher m2 = Pattern.compile(urlRegex).matcher(fareDetails);
+      final List<String> matches2 = new ArrayList<>();
+      while (m2.find()) {
+          matches2.add(m2.group(0));
+      }
+
+      String ratingUrl = matches2.get(0).split("\"")[0];
+      ratingUrl = baseDomain + ratingUrl;
+
+      String response = APIHelper.get(ratingUrl);
+      String findStr = "golden-star";
+      int lastIndex = 0;
+      int ratings = 0;
+      while(lastIndex != -1){
+          lastIndex = response.indexOf(findStr,lastIndex);
+
+          if(lastIndex != -1){
+              ratings++;
+              lastIndex += findStr.length();
+          }
+      }
+      return ratings;
+    }
+
+    static Double parseFare(String fareResponse) {
+
+      String dollarAmountRegex = "((-)?(\\$){1}(-)?\\d+.\\d+)";
+
+      Pattern p = Pattern.compile(dollarAmountRegex);
+      Matcher matcher = p.matcher(fareResponse);
+      while (matcher.find()) {
+        String dollarAmount = matcher.group();
+        return Double.valueOf(dollarAmount.substring(dollarAmount.indexOf("$") + 1));
+      }
+
+      return 0.0;
     }
 
     @Override
